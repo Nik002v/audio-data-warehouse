@@ -1,0 +1,22 @@
+-- 1. Listening minutes by listener gender, age range, and location
+SELECT
+  {[Measures].[UkupnoMinutiSlusanja]} ON COLUMNS,
+  NON EMPTY [Pol].[Pol].Members *
+            [Uzrast].[Uzrast].Members *
+            [MestoKorisnika].[Mesto].Members ON ROWS
+FROM [Slusanje];
+
+-- 2. Average rating by audio category and content-owner location
+SELECT
+  {[Measures].[ProsecnaOcena]} ON COLUMNS,
+  NON EMPTY [Kategorija].[Kategorija].Members *
+            [MestoVlasnika].[Mesto].Members ON ROWS
+FROM [Ocena];
+
+-- 3. Subscription revenue by subscriber gender, age range, and location
+SELECT
+  {[Measures].[Iznos]} ON COLUMNS,
+  NON EMPTY [Pol].[Pol].Members *
+            [Uzrast].[Uzrast].Members *
+            [MestoKorisnika].[Mesto].Members ON ROWS
+FROM [Pretplata];

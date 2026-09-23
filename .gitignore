@@ -1,0 +1,15 @@
+# Pentaho runtime and local metadata
+.kettle/
+*.log
+*.lck
+
+# IDE and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local credentials and environment files
+.env
+.env.*
+*.properties.local

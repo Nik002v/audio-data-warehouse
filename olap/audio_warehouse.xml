@@ -1,0 +1,104 @@
+<Schema name="skladiste">
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Mesto">
+    <Hierarchy name="H" visible="true" hasAll="true" primaryKey="IdMesto">
+      <Table name="dim_mesto">
+      </Table>
+      <Level name="Mesto" visible="true" table="dim_mesto" column="NazivMesta" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Pol">
+    <Hierarchy name="H" visible="true" hasAll="true" primaryKey="IdPol">
+      <Table name="dim_pol">
+      </Table>
+      <Level name="Pol" visible="true" table="dim_pol" column="Pol" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Uzrast">
+    <Hierarchy name="H" visible="true" hasAll="true" primaryKey="IdUzrast">
+      <Table name="dim_uzrast">
+      </Table>
+      <Level name="Uzrast" visible="true" table="dim_uzrast" column="OpsegUzrasta" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="TimeDimension" visible="true" highCardinality="false" name="Vreme">
+    <Hierarchy name="H" visible="true" hasAll="true" primaryKey="IdVreme">
+      <Table name="dim_vreme">
+      </Table>
+      <Level name="Vreme" visible="true" table="dim_vreme" column="DatumVreme" type="Timestamp" uniqueMembers="false" levelType="TimeSeconds" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Kategorija">
+    <Hierarchy name="H" visible="true" hasAll="true" primaryKey="IdKategorija">
+      <Table name="dim_kategorija">
+      </Table>
+      <Level name="Kategorija" visible="true" table="dim_kategorija" column="NazivKategorije" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Audio">
+    <Hierarchy name="H" visible="true" hasAll="true" primaryKey="IdAudio">
+      <Table name="dim_audio">
+      </Table>
+      <Level name="NazivAudio" visible="true" table="dim_audio" column="NazivAudio" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="TrajanjeAudio" visible="true" table="dim_audio" column="TrajanjeAudio" type="Integer" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Cube name="Ocena" visible="true" cache="true" enabled="true">
+    <Table name="cinjenica_ocena">
+    </Table>
+    <DimensionUsage source="Vreme" name="Vreme" visible="true" foreignKey="IdVreme" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Kategorija" name="Kategorija" visible="true" foreignKey="IdKategorija" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Pol" name="Pol" visible="true" foreignKey="IdPol" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Uzrast" name="Uzrast" visible="true" foreignKey="IdUzrast" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Mesto" name="MestoKorisnika" visible="true" foreignKey="IdMestoKorisnika" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Mesto" name="MestoVlasnika" visible="true" foreignKey="IdMestoVlasnika" highCardinality="false">
+    </DimensionUsage>
+    <Measure name="BrojOcena" column="UkupanBrojOcena" aggregator="sum" visible="true">
+    </Measure>
+    <Measure name="ProsecnaOcena" column="ProsecnaOcena" aggregator="avg" visible="true">
+    </Measure>
+  </Cube>
+  <Cube name="Pretplata" visible="true" cache="true" enabled="true">
+    <Table name="cinjenica_pretplata">
+    </Table>
+    <DimensionUsage source="Vreme" name="Vreme" visible="true" foreignKey="IdVreme" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Pol" name="Pol" visible="true" foreignKey="IdPol" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Uzrast" name="Uzrast" visible="true" foreignKey="IdUzrast" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Mesto" name="MestoKorisnika" visible="true" foreignKey="IdMestoKorisnika" highCardinality="false">
+    </DimensionUsage>
+    <Measure name="Iznos" column="Iznos" aggregator="sum" visible="true">
+    </Measure>
+  </Cube>
+  <Cube name="Slusanje" visible="true" cache="true" enabled="true">
+    <Table name="cinjenica_slusanje">
+    </Table>
+    <DimensionUsage source="Vreme" name="Vreme" visible="true" foreignKey="IdVreme" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Audio" name="Audio" visible="true" foreignKey="IdAudio" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Pol" name="Pol" visible="true" foreignKey="IdPol" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Uzrast" name="Uzrast" visible="true" foreignKey="IdUzrast" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Mesto" name="MestoKorisnika" visible="true" foreignKey="IdMestoKorisnika" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Mesto" name="MestoVlasnika" visible="true" foreignKey="IdMestoVlasnika" highCardinality="false">
+    </DimensionUsage>
+    <Measure name="UkupnoMinutiSlusanja" column="UkupnoMinutaSlusanja" aggregator="sum" visible="true">
+    </Measure>
+  </Cube>
+</Schema>

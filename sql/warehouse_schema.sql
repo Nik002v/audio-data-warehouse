@@ -1,0 +1,87 @@
+DROP DATABASE IF EXISTS AudioSkladiste;
+CREATE DATABASE AudioSkladiste;
+USE AudioSkladiste;
+
+CREATE TABLE POSLEDNJA_IZMENA (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    PoslednjaIzmena TIMESTAMP NOT NULL
+);
+
+CREATE TABLE DIM_VREME (
+    IdVreme INT PRIMARY KEY AUTO_INCREMENT,
+    DatumVreme TIMESTAMP NOT NULL
+);
+
+CREATE TABLE DIM_AUDIO (
+    IdAudio INT PRIMARY KEY AUTO_INCREMENT,
+    NazivAudio VARCHAR(200) NOT NULL,
+    TrajanjeAudio INT NOT NULL
+);
+
+CREATE TABLE DIM_POL (
+    IdPol INT PRIMARY KEY AUTO_INCREMENT,
+    Pol ENUM('M', 'Z') NOT NULL
+);
+
+CREATE TABLE DIM_UZRAST (
+    IdUzrast INT PRIMARY KEY AUTO_INCREMENT,
+    OpsegUzrasta VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE DIM_MESTO (
+    IdMesto INT PRIMARY KEY AUTO_INCREMENT,
+    NazivMesta VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE DIM_KATEGORIJA (
+    IdKategorija INT PRIMARY KEY AUTO_INCREMENT,
+    NazivKategorije VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE CINJENICA_SLUSANJE (
+    IdVreme INT NOT NULL,
+    IdAudio INT NOT NULL,
+    IdPol INT NOT NULL,
+    IdUzrast INT NOT NULL,
+    IdMestoKorisnika INT NOT NULL,
+    IdMestoVlasnika INT NOT NULL,
+    UkupnoMinutaSlusanja DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY (IdVreme, IdAudio, IdPol, IdUzrast, IdMestoKorisnika, IdMestoVlasnika),
+    FOREIGN KEY (IdVreme) REFERENCES DIM_VREME(IdVreme),
+    FOREIGN KEY (IdAudio) REFERENCES DIM_AUDIO(IdAudio),
+    FOREIGN KEY (IdPol) REFERENCES DIM_POL(IdPol),
+    FOREIGN KEY (IdUzrast) REFERENCES DIM_UZRAST(IdUzrast),
+    FOREIGN KEY (IdMestoKorisnika) REFERENCES DIM_MESTO(IdMesto),
+    FOREIGN KEY (IdMestoVlasnika) REFERENCES DIM_MESTO(IdMesto)
+);
+
+CREATE TABLE CINJENICA_OCENA (
+    IdVreme INT NOT NULL,
+    IdKategorija INT NOT NULL,
+    IdPol INT NOT NULL,
+    IdUzrast INT NOT NULL,
+    IdMestoKorisnika INT NOT NULL,
+    IdMestoVlasnika INT NOT NULL,
+    UkupanBrojOcena INT NOT NULL,
+    ProsecnaOcena DECIMAL(3,2) NOT NULL,
+    PRIMARY KEY (IdVreme, IdKategorija, IdPol, IdUzrast, IdMestoKorisnika, IdMestoVlasnika),
+    FOREIGN KEY (IdVreme) REFERENCES DIM_VREME(IdVreme),
+    FOREIGN KEY (IdKategorija) REFERENCES DIM_KATEGORIJA(IdKategorija),
+    FOREIGN KEY (IdPol) REFERENCES DIM_POL(IdPol),
+    FOREIGN KEY (IdUzrast) REFERENCES DIM_UZRAST(IdUzrast),
+    FOREIGN KEY (IdMestoKorisnika) REFERENCES DIM_MESTO(IdMesto),
+    FOREIGN KEY (IdMestoVlasnika) REFERENCES DIM_MESTO(IdMesto)
+);
+
+CREATE TABLE CINJENICA_PRETPLATA (
+    IdVreme INT NOT NULL,
+    IdPol INT NOT NULL,
+    IdUzrast INT NOT NULL,
+    IdMestoKorisnika INT NOT NULL,
+    Iznos DECIMAL(12,2) NOT NULL,
+    PRIMARY KEY (IdVreme, IdPol, IdUzrast, IdMestoKorisnika),
+    FOREIGN KEY (IdVreme) REFERENCES DIM_VREME(IdVreme),
+    FOREIGN KEY (IdPol) REFERENCES DIM_POL(IdPol),
+    FOREIGN KEY (IdUzrast) REFERENCES DIM_UZRAST(IdUzrast),
+    FOREIGN KEY (IdMestoKorisnika) REFERENCES DIM_MESTO(IdMesto)
+);
